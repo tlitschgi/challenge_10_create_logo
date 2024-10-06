@@ -8,9 +8,8 @@ This interactive application allows the user to create a logo.  When the applica
 The application will generate/create a logo based on the answers and store in the logo.svg file.  When the file is created, the logo can be viewed in the browser.
 
 Video of interactive application executed:
-
 https://github.com/user-attachments/assets/f91cbf70-cbb2-4bf1-bd9c-b754a5152b07
 
 Result of interactive application executed:
-![Generated logo](https://github.com/user-attachments/assets/53eef32b-2cfc-415a-9a6d-142716080bdb)
+![image](https://github.com/user-attachments/assets/eb191cf9-e219-4e73-bfdd-09d9c12d9a1c)
 
