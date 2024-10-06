@@ -8,12 +8,27 @@ const rl = readline.createInterface({
   output: process.stdout
 });
 
-// Prompt user with question and return promise with the user answer
-function promptUser(question) {
+// Prompt user with question.
+// When valid entry, return promise with the user answer.
+// When invalid entry, respond with error and retry message for user.
+function promptUser(question, validator = null) {
   return new Promise((resolve) => {
-    rl.question(question, (answer) => {
-      resolve(answer);
-    });
+    const askQuestion = () => {
+      rl.question(question, (answer) => {
+        if (validator) {
+          const validationResult = validator(answer);
+          if (validationResult === true) {
+            resolve(answer);
+          } else {
+            console.log(validationResult);
+            askQuestion();
+          }
+        } else {
+          resolve(answer);
+        }
+      });
+    };
+    askQuestion();
   });
 }
 
@@ -34,7 +49,7 @@ function generateSVG(color, shape, text) {
       throw new Error('Invalid shape. Please choose circle, square, or triangle.');
   }
 
-  // Return SVG
+  // Return SVG logo based on user entry
   return `
     <svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
       ${logoElement}
@@ -44,13 +59,21 @@ function generateSVG(color, shape, text) {
 
 // Main function to execute program
 // Prompt user to enter logo details and wait for response
-// Generate and save SVG based on entered user logo details
+// Generate and save SVG file based on entered user logo details
 // Close readline interface
 async function main() {
   try {
     const color = await promptUser('Enter a color (e.g., #ff0000 or red): ');
-    const shape = await promptUser('Enter a shape (circle, square, or triangle): ');
-    const text = await promptUser('Enter text for the logo: ');
+    const shape = await promptUser('Enter a shape (circle, square, or triangle): ',
+      (input) => {
+        const validShapes = ['circle', 'square', 'triangle'];
+        return validShapes.includes(input.toLowerCase()) 
+          ? true 
+          : 'Invalid shape. Please choose circle, square, or triangle.';
+      }
+    );
+    const text = await promptUser('Enter text for the logo (max 3 characters): ', 
+      (input) => input.length <= 3 ? true : 'Text must be 3 characters or less. Please try again.');
 
     const svg = generateSVG(color, shape, text);
 
