@@ -1,48 +1,8 @@
-// Import readline and file system
 const readline = require('readline');
 const fs = require('fs');
-
-// Class for shape
-class Shape {
-  constructor(color, text) {
-    this.color = color;
-    this.text = text;
-  }
-
-  render() {
-    throw new Error('render() method must be implemented by child classes');
-  }
-
-  // Generate SVG based on the user shape answer
-  generateSVG() {
-    return `
-    <svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
-      ${this.render()}
-      <text x="100" y="100" font-family="Arial" font-size="24" fill="white" text-anchor="middle" dominant-baseline="middle">${this.text}</text>
-    </svg>`;
-  }
-}
-
-// Class to create Circle shape
-class Circle extends Shape {
-  render() {
-    return `<circle cx="100" cy="100" r="80" fill="${this.color}" />`;
-  }
-}
-
-// Class to create sqaure shape
-class Square extends Shape {
-  render() {
-    return `<rect x="20" y="20" width="160" height="160" fill="${this.color}" />`;
-  }
-}
-
-// Class to create triange shape
-class Triangle extends Shape {
-  render() {
-    return `<polygon points="100,20 180,180 20,180" fill="${this.color}" />`;
-  }
-}
+const Circle = require('./lib/circle');
+const Square = require('./lib/square');
+const Triangle = require('./lib/triangle');
 
 // Create readline variable and interface used for input and output data
 const rl = readline.createInterface({
@@ -119,4 +79,9 @@ async function main() {
   }
 }
 
-main();
+// Run the main function if running directly
+if (require.main === module) {
+  main();
+}
+
+module.exports = { createShape };
